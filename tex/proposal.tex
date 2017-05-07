@@ -5,6 +5,15 @@
 %\usepackage[parfill]{parskip}    		% Activate to begin paragraphs with an empty line rather than an indent
 \usepackage{graphicx}				% Use pdf, png, jpg, or eps§ with pdflatex; use eps in DVI mode
 								% TeX will automatically convert eps --> pdf in pdflatex		
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=red,
+    citecolor=magenta,      
+    urlcolor=blue,
+}
+\urlstyle{same}
+
 \usepackage{amssymb}
 
 %SetFonts
@@ -12,18 +21,117 @@
 %SetFonts
 
 
-\title{TEST}
+\title{Classification of Physics Events using Machine Learning\\
+	\large Capstone Proposal for Udacity's Machine Learning Engineer Nanodegree}
 \author{Gabriel Santucci}
 \date{May 2017}
 
 \begin{document}
 \maketitle
 
+\section*{Proposal}
+ \label{Domain_Background} \section{Domain Background}
+There is a type of theories in particle physics called Grand Unified Theories (GUTs). The main idea behind all variations of GUTs is to have a unified description of 3 fundamental interactions of nature: the strong, weak and electromagnetic forces. There are many types of GUT models \cite{GUTs} each of them with different predictions, but one thing they all have in common is nucleon decay.
 
-This is the main thing!
+Nucleons is the generic name for protons and neutrons, particles that live inside the nucleus of an atom. As far as we know, the proton is a stable \footnote{Being stable means that the particle will not spontaneously decay into other particles.}particle and so is the neutron inside a nucleus (although free neutrons can decay). Since the typical energy of GUTs is far beyond the reach of any particle physics experiment, nucleon decay is the best bet for searching for evidence of GUTs.
+
+One particular class of GUTs is the so called SUSY GUTs, when supersymmetry is present in the theory. In some models, the preferred channel for proton decay is $p\rightarrow \bar{\nu}_{\mu}K^{+}$, where the proton decays to two other particles: an anti-neutrino and a charged Kaon. Searching for this kind of event is very challenging, but some experiments were built in the 80's and 90's to search for this kind of event. One of the main difficulties to detect this type of signal is due to neutrinos that are created in Earth's atmosphere and then interact inside the detector, leaving a signature very similar to the one left by the decay of a proton.
+
+In physics the interesting class that is being studied is called 'Signal' and all other possible interactions that produce similar data in the detector is called 'Background'. These can be mapped into \{1,0\} classes for machine learning algorithms to perform binary classification \footnote{The physics and ML names will be used interchangeably.}.  This study tries to improve the identification of these two classes: proton decay and atmospheric neutrino events.
+
+\section{Problem Statement}
+
+To date, the biggest experiment looking for proton decay signal is the Super-Kamiokande (SK) experiment \cite{SK}. SK is a big water tank containing 50 kton of ultra pure water. When a charged particle travels at extremely high speeds inside the tank, it produces light, this is the Cherenkov effect \cite{Cherenkov}. In the walls of the tank there are photo-multiplier tubes (PMTs), which essentially are light detectors \cite{PMT}. Using these PMTs we know when a particle passed through the detector leaving a trace and producing light. In the SK tank there are more than 11 thousand PMTs to collect this light. We then have a data set with the time and charge of each PMT that received a hit. A reconstruction algorithm is then applied on this data so that physics quantities can be studied, like momentum, energy, direction and position of each particle that participated in the event.
+
+As described in section \ref{Domain_Background}, the proton decay mode that we are interested here consists of an anti-neutrino and a charged Kaon. The anti-neutrino has no electric charge, so it does not leave a trace in the detector and the Kaon also can not be seen, even though it has charge. That is because it does not have enough energy to be traveling at very high speeds, so it does not produce any light. But since the Kaon also decays, the hope is to see the decay products of the Kaon. Most of the time, it decays to a neutrino (which can not be seen) and an anti-muon\footnote{This is the only Kaon decay mode that will be used in the analysis here. But there is another decay mode that can be seen by SK.}, which is charged and can be detected. Since this is a 2-body decay (the initial particle decays into 2 particles), and we know the masses of the final state particles, using energy and momentum conservation we also know the exact energy and momentum of the muon we are looking for.
+
+The problem is that after all this, the only visible particle that we can detect is the mono-energetic muon\footnote{This means that the energy of the muon is always the same. Also, since the SK can not detect the sign of the particle's charge (+ or -), we will not make a distinction between muons and anti-muons.}. This would make the search impossible, due to the amount of background events coming from atmospheric neutrino interactions. The solution is to look only for protons that decay inside the Oxygen nucleus of the water molecules, but not for the ones coming from the Hydrogen atoms. The difference is that when a proton decay inside the Oxygen, the remaining nucleus is left in an excited state and can emit 
+a low energy photon (also called gamma) from nuclear de-excitation. If we look for this photon in coincidence with a mono-energetic muon, we then have a very particular signature in the detector that can be used to differentiate signal and background events.
+
+Insert pdecay figure here!
+
+Even though the situation is better now, it is still a challenge to identify if a signal comes from a proton that decayed or a neutrino that entered the detector and interacted with some nucleus. There are billions\footnote{Neutrinos come from many different sources, the main ones are the atmosphere and the Sun. Most of them cross our bodies, the Earth and all else and leave intact, since the chance of a neutrino interacting with something is incredibly small. Only from the Sun, 65 billion neutrinos cross a  person's thumb every second.} of neutrinos entering the detector every second. The chance of a neutrino interacting with a nucleus inside the tank is extremely small, but since the flux of incoming neutrinos is so high, we are bound to see some neutrino events\footnote{The detection of neutrinos in SK was awarded the Nobel prize in physics in 2015 for proving that neutrinos have mass \cite{Nobel}.} every hour or so.
+
+Some of these events leave a trace in the detector that is very similar to our signal, so distinguishing between signal and background events is challenging. SK has searched for this decay mode before and the strategy used was to apply simple cuts in reconstructed variables such as momentum and number of particles present in the event. By looking at many distributions of these variables (features) and applying hard boundary cuts on them, a selection criteria was used to determine if an event is coming from signal or background. Details can be found here \cite{Miura}.
+
+The goal of this study is to improve the selection criteria using Machine Learning techniques. This could enhance the signal-background separation leading to a better limit on the proton lifetime.
+
+\section{Datasets and Inputs}
+
+In this section, the dataset(s) and/or input(s) being considered for the project should be thoroughly described, such as how they relate to the problem and why they should be used. Information such as how the dataset or input is (was) obtained, and the characteristics of the dataset or input, should be included with relevant references and citations as necessary It should be clear how the dataset(s) or input(s) will be used in the project and whether their use is appropriate given the context of the problem.
+
+\section{Solution Statement}
+
+In this section, clearly describe a solution to the problem. The solution should be applicable to the project domain and appropriate for the dataset(s) or input(s) given. Additionally, describe the solution thoroughly such that it is clear that the solution is quantifiable (the solution can be expressed in mathematical or logical terms) , measurable (the solution can be measured by some metric and clearly observed), and replicable (the solution can be reproduced and occurs more than once).
+
+\section{Benchmark Model}
+
+In this section, provide the details for a benchmark model or result that relates to the domain, problem statement, and intended solution. Ideally, the benchmark model or result contextualizes existing methods or known information in the domain and problem given, which could then be objectively compared to the solution. Describe how the benchmark model or result is measurable (can be measured by some metric and clearly observed) with thorough detail.
+
+\section{Evaluation Metrics}
+
+In this section, propose at least one evaluation metric that can be used to quantify the performance of both the benchmark model and the solution model. The evaluation metric(s) you propose should be appropriate given the context of the data, the problem statement, and the intended solution. Describe how the evaluation metric(s) are derived and provide an example of their mathematical representations (if applicable). Complex evaluation metrics should be clearly defined and quantifiable (can be expressed in mathematical or logical terms).
 
 
+\section{Project Design}
 
+In this final section, summarize a theoretical workflow for approaching a solution given the problem. Provide thorough discussion for what strategies you may consider employing, what analysis of the data might be required before being used, or which algorithms will be considered for your implementation. The workflow and discussion that you provide should align with the qualities of the previous sections. Additionally, you are encouraged to include small visualizations, pseudocode, or diagrams to aid in describing the project design, but it is not required. The discussion should clearly outline your intended workflow of the capstone project.
+
+
+\section{Before submitting your proposal, ask yourself. . .}
+
+\begin{itemize}  
+\item Does the proposal you have written follow a well-organized structure similar to that of the project template?
+ 
+\item Is each section (particularly Solution Statement and Project Design) written in a clear, concise and specific fashion? Are there any ambiguous terms or phrases that need clarification?
+ 
+\item Would the intended audience of your project be able to understand your proposal?
+
+\item Have you properly proofread your proposal to assure there are minimal grammatical and spelling mistakes?
+
+\item Are all the resources used for this project correctly cited and referenced?
+
+\ldots 
+\end{itemize}
+
+\begin{thebibliography}{9}
+
+\bibitem{GUTs}
+  W. de Boer,
+  \textbf{Grand Unified Theories
+	and Supersymmetry in
+	Particle Physics and Cosmology}.
+  \href{https://arxiv.org/pdf/hep-ph/9402266.pdf}{arXiv:9402266}
+
+\bibitem{SK}
+  Super-Kamiokande collaboration,
+  \textbf{The Super-Kamiokande detector},
+  Nuclear Instruments and Methods in Physics Research A 501 (2003) 418-462. 
+  \href{http://www-sk.icrr.u-tokyo.ac.jp/~masato_s/class/sk-detector.pdf}{SK detector}
+  
+  \bibitem{Cherenkov}
+  For more see: 
+  \href{https://en.wikipedia.org/wiki/Cherenkov_radiation}{Wiki Cherenkov Radiation}
+
+  \bibitem{PMT}
+  For more see: 
+  \href{https://en.wikipedia.org/wiki/Photomultiplier}{Wiki Photomultipliers}
+  
+  \bibitem{Nobel}
+  For more see: 
+  \href{http://www.nobelprize.org/nobel_prizes/physics/laureates/2015/}{2015 Nobel}
+  
+  \bibitem{Miura}
+  Super-Kamiokande collaboration,
+  \textbf{Search for Proton Decay via $p\rightarrow \nu K^{+}$ using 260 kiloton$\cdot$year data of Super-Kamiokande}.
+  \href{https://arxiv.org/pdf/1408.1195v1.pdf}{arXiv:1408.1195}
+  
+  \bibitem{Nobel2}
+  For more:
+  \href{http://www.nobelprize.org/nobel_prizes/physics/laureates/2015/}{2015 Nobel}
+
+
+\end{thebibliography}
 
 \end{document}
 
