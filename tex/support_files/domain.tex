@@ -1,0 +1,11 @@
+
+\section{Domain Background} \label{Domain}
+There is a type of theories in particle physics called Grand Unified Theories (GUTs). The main idea behind all variations of GUTs is to have a unified description of 3 fundamental interactions of nature: the strong, weak and electromagnetic forces. There are many types of GUT models \cite{GUTs} each of them with different predictions, but one thing they all have in common is nucleon\footnote{Nucleon is the generic name for protons and neutrons, particles that live inside the nucleus of an atom.} decay.
+
+As far as we know, the proton is a stable\footnote{Being stable means that the particle will not spontaneously decay into other particles.}particle and so is the neutron inside a nucleus (although free neutrons can decay). Since the typical energy of GUTs is far beyond the reach of any particle physics experiment, nucleon decay is the best bet for searching for evidence of GUTs.
+
+One particular class of GUTs is the so called SUSY GUTs, when supersymmetry is present in the theory. In some models, the preferred channel for proton decay is $p\rightarrow \bar{\nu}_{\mu}K^{+}$, where the proton decays to two other particles: an anti-neutrino and a charged Kaon. Detecting this kind of event is very challenging, but some experiments were built in the 80's and 90's to search for this kind of event. One of the main difficulties to detect this type of signal is due to neutrinos that are created in Earth's atmosphere and then interact inside the detector, leaving a signature very similar to the one left by the decay of a proton.
+
+In physics the interesting class that is being studied is called 'Signal' and all other possible interactions that produce similar data in the detector are collectively called 'Background'\footnote{The physics and ML names will be used interchangeably.}. These can be mapped into \{1,0\} classes for machine learning algorithms to perform binary classification.
+
+I propose to study improvements that machine learning classifiers can make in the identification of these two classes: proton decay signal and background interactions coming from atmospheric neutrino events in the Super-Kamiokande experiment.

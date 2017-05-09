@@ -4,6 +4,7 @@
 %\usepackage[parfill]{parskip}    		% Activate to begin paragraphs with an empty line rather than an indent
 \usepackage{graphicx}				% Use pdf, png, jpg, or eps§ with pdflatex; use eps in DVI mode
 								% TeX will automatically convert eps --> pdf in pdflatex		
+\usepackage{mathtools}
 \usepackage{hyperref}
 \hypersetup{
     colorlinks=true,
@@ -12,55 +13,41 @@
     urlcolor=blue,
 }
 \urlstyle{same}
+\usepackage{authblk}
+
 
 \usepackage{amssymb}
 
 %SetFonts
 
-\title{Classification of Physics Events using Machine Learning\\
+\title{Classification of Physics Events Using Machine Learning\\
 	\large Capstone Proposal for Udacity's Machine Learning Engineer Nanodegree}
-\author{Gabriel Santucci}
+\author[1]{Gabriel Santucci}
+\affil[1]{Nucleon Decay and Neutrino Group, Stony Brook University Physics Department}
 \date{May 2017}
 
 \begin{document}
 \maketitle
 
+\input{support_files/abstract.tex}
+
 \section*{Proposal}
  
- \input{domain.tex}
+ \input{support_files/domain.tex}
  
- \input{problem.tex}
+ \input{support_files/problem.tex}
 
-\input{data.tex}
+\input{support_files/data.tex}
 
-\input{solution.tex}
+\input{support_files/solution.tex}
 
-\input{metric.tex}
+\input{support_files/benchmark.tex}
 
-\input{benchmark.tex}
+\input{support_files/metric.tex}
 
-\section{Project Design}
+\input{support_files/design.tex}
 
-In this final section, summarize a theoretical workflow for approaching a solution given the problem. Provide thorough discussion for what strategies you may consider employing, what analysis of the data might be required before being used, or which algorithms will be considered for your implementation. The workflow and discussion that you provide should align with the qualities of the previous sections. Additionally, you are encouraged to include small visualizations, pseudocode, or diagrams to aid in describing the project design, but it is not required. The discussion should clearly outline your intended workflow of the capstone project.
-
-
-\section{Before submitting your proposal, ask yourself. . .}
-
-\begin{itemize}  
-\item Does the proposal you have written follow a well-organized structure similar to that of the project template?
- 
-\item Is each section (particularly Solution Statement and Project Design) written in a clear, concise and specific fashion? Are there any ambiguous terms or phrases that need clarification?
- 
-\item Would the intended audience of your project be able to understand your proposal?
-
-\item Have you properly proofread your proposal to assure there are minimal grammatical and spelling mistakes?
-
-\item Are all the resources used for this project correctly cited and referenced?
-
-\ldots 
-\end{itemize}
-
-\input{bib.tex}
+\input{support_files/bib.tex}
 
 \end{document}
 

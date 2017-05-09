@@ -1,0 +1,74 @@
+\section{Evaluation Metrics} \label{Metric}
+
+In this work, two numbers are crucial to judge a classifier performance: efficiency and expected background rate.
+
+\subsection{Efficiency} \label{Efficiency}
+Let us define efficiency as:
+
+\begin{equation} \label{eq:eff}
+\epsilon = r\textrm{ (recall)} = \frac{TP}{TP + FN},
+\end{equation}
+
+where $TP$ is the number of true positives\footnote{The number of events correctly classified as class 1.} and $FN$ is the number of false negatives\footnote{The number of events incorrectly classified as class 0.}. So efficiency is the same as recall and it measures how well the classifier is able to select events of the signal class. Ideally this will be as high as possible while keeping the number of false positives (FP\footnote{The number of events incorrectly classified as class 1.}) as low as possible.
+
+To be able to compare the efficiency of this study with the standard efficiency presented in Section \ref{Benchmark} it is necessary to rescale the total number of events in class 1: FP+FN. That is because $\epsilon_{B}$ uses a slightly different definition of efficiency, so we have to multiply by the total number of class 1 events in our sample and divide by the total number of class 1 events before the filtering process described in section \ref{Data}. The total number of class 1 events in our sample is 18652 and the total number of events used by the standard analysis is 82687. Therefore, 18652/82687 = 0.23 is the scale factor we need to apply in our efficiency when comparing with the benchmark efficiency, $\epsilon_{B} = 0.084$.
+
+\subsection{Expected Background} \label{Background}
+
+The expected number of background events is related to the number of FP in the analysis. As described in Section \ref{Data}, an atmospheric neutrino sample corresponding 500 years of data was used. But the typical way of presenting a background expectation value is given in $\textrm{Mton}\cdot\textrm{year}$. This is the amount of background events expected to be detected if the detector took data for 1 year and its size was 1 million tones. By doing that, it is easy to compare different experiment results, since not all experiments have the same size or run for the same amount of time.
+
+To achieve that, we first need to divide our number of false positives by 500, to have an yearly rate and then scale our volume. SK has 50 kilo-tones of water, but only 22.5 kilo-tones are used to take data (this is the fiducial volume as described in Section \ref{Data}). Thus, we have:
+
+\begin{equation} \label{eq:mtonyear}
+FP\rightarrow \frac{FP}{500}\cdot \frac{1}{0.0225} = 0.089\cdot FP,
+\end{equation}
+
+where the 0.0225 corresponds to the fiducial volume of SK in  $\textrm{Mton}$. Another useful way of reporting background is by given the expected number of background events that correspond to the time the experiment actually took data. This is called the live time of the experiment and it is defined by the number of days that data was taken. SK has started taking data since 1996, but throughout the years, many different things changed in the experiment (all the SK eras are described in \cite{SK}) so the number of years that will be used in this analysis is $2519.89\textrm{ days} = 6.90\textrm{ years}$. Since we have the number of FP in 500 years of data, we simply have to scale that down to 6.90 years to obtain the expected number of FP in the live time, given that the volume of the detector is the same. Thus, 
+
+\begin{equation} \label{eq:livetime}
+FP\rightarrow FP\cdot \frac{6.90}{500} = FP\cdot 0.0138,
+\end{equation}
+
+where the scale factor is simply the ratio of both live times.
+
+\subsection{Possible Metrics} \label{Metric_sub}
+
+\subsubsection{The F1 score} \label{F1_score}
+
+With these definitions of efficiency and background rates, a metric can be formed to be used as a score for each classifier that we test. Given that we need to have the best efficiency possible while reducing the number of FP as much as possible, one popular choice would be the F1 score, the weighted average of recall and precision given by:
+
+\begin{equation} \label{eq:F1}
+\textrm{F1} = 2\frac{pr}{p+r},
+\end{equation}
+
+where $r$ is the recall defined as efficiency in eq. \ref{eq:eff} and $p$ is the precision defined as:
+
+\begin{equation} \label{eq:precision}
+p = \frac{TP}{TP + FP},
+\end{equation}
+
+thus, $p$ incorporates the FP quantity that we want to minimize. For a low number of false positives, $p\rightarrow 1$.
+
+In case the classifier is performing extremely well, recall and precision approach 1 as the number of FN and FP go to zero, making $\textrm{F1}\rightarrow 1$. This metric can certainly serve as a comparison between two different classifiers, but it can raise a problem when looking at the number of FP. Since $p$ and $r$ are treated equally in F1, we might achieve high scores without reducing the number of FP enough (comparing it to the benchmark rate for example).
+
+\subsubsection{The 5-sigma standard} \label{5sigma}
+
+As it was seen in Section \ref{Benchmark}, the expected background rate has to be as low as possible to claim a discovery or to increase the proton lifetime. Thus, it might be better to use another metric that incorporates the need of making FP low. A popular choice in high energy physics is $S/B$ or $S/\sqrt{B}$, where $S$ represents signal and $B$ the expected background. We can use the definition of signal efficiency (recall) and the expected number of background events in the simulated live time as the measurements of $S$ and $B$. As our efficiency increases, the capacity of detecting signal ($S$) increases and as the expected number of background events (given by eq. \ref{eq:livetime}) decreases, our confidence that a selected event is indeed a proton decay event increases.
+
+This definition of $\frac{S}{\sqrt{B}}$ is one way an experiment can report sensitivity results for new discoveries \cite{Higgs}. In the high energy physics community, the standard threshold is that $\frac{S}{\sqrt{B}} > 5$ to be able to claim the discovery of a new particle or phenomena. What this means is that the background expectation has to fluctuate at least 5 standard deviations\footnote{Assuming a Poisson distribution for the number of background events, then the fluctuation of n events is given by $\sigma = \sqrt{n}$} to be able to explain your observation. Given that a $5\sigma$ fluctuation is extremely unlikely\footnote{One has to calculate the p-value associated with the measurement to quantify how unlikely the observation is. Assuming a gaussian distribution for $\sigma$ gives 1 chance in 3.5 million. A lot more strict than the 1 in 20, used by other fields with p-value of 5\%. }, it indicates the sign of new physics. 
+
+This way if we observe 1 event that is classified as signal and we have an efficiency of 0.9 for example, we have $S = 0.9$. If we expect 0.2 background events in the amount of data being analyzed (live time), we have $\sqrt{B} = 0.44$ and then
+
+$$\frac{S}{\sqrt{B}} = \frac{0.9}{0.44} \approx 2,$$
+
+this simple example shows the importance of how low the number of FP has to be. Even if we have a 90\% efficiency and a low background rate of only 0.2 events, it is still not unlikely to obseve one event in the data. Given that there is a reasonable chance that 0.2 can fluctuate to 0.9. For a 90\% efficient classifier, we need to expect less than 0.03 events in the data to have a $5\sigma$ sensitivity.
+
+\subsubsection{Conclusion} \label{Conclusion}
+
+I plan to study at least the two metrics presented here in this proposal and see which one is better to achieve the wanted results.
+
+
+
+
+
+
